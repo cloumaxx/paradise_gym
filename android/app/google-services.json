@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "943510605629",
+    "project_id": "paradisegym",
+    "storage_bucket": "paradisegym.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943510605629:android:671281956a28a3c3577f54",
+        "android_client_info": {
+          "package_name": "gygacode.gym"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943510605629-qkdk28jt93mhc4u7466kehl7438iint0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKucXzRXwa9fIfd2lJCPK2FZMO0UVEBMM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943510605629-qkdk28jt93mhc4u7466kehl7438iint0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
