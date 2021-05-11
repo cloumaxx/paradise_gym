@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:intl/date_symbol_data_local.dart';
+
+import 'dart:core';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,6 +29,7 @@ class _PantCalendarState extends State<PantCalendar> {
   List<dynamic> _selectedEvents;
   TextEditingController _eventController;
   Stream events;
+
   SharedPreferences prefs;
   var cantGente;
 
@@ -256,6 +261,15 @@ class _PantCalendarState extends State<PantCalendar> {
             ),
             calendarController: _controller,
           ),
+          ..._selectedEvents.map((event) => ListTile(
+                title: Text(
+                  event + "\n",
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              )),
 
           SizedBox(height: 20),
           Container(
@@ -445,5 +459,17 @@ class _PantCalendarState extends State<PantCalendar> {
     setState(() {
       _selectedEvents = _events[_controller.selectedDay];
     });
+  }
+
+  Future<void> agendarse() async {
+    //  final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    // DatabaseReference ref = database.getReference("server/saving-data/fireblog");
+    //  DatabaseReference usersRef = ref.child("usuarios");
+
+//    DatabaseReference hopperRef = usersRef.child("gracehop");
+    //  Map<String, Object> hopperUpdates = new HashMap<>();
+    //  hopperUpdates.put("nickname", "Amazing Grace");
+//
+    //  hopperRef.updateChildrenAsync(hopperUpdates);
   }
 } //_Pantalla3State

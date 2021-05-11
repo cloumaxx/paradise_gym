@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'dart:convert';
 
 class PantEstadoGym extends StatefulWidget {
   PantEstadoGym({Key key, this.title}) : super(key: key);
@@ -17,13 +19,18 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
   var cantGente;
   String titulo = "";
   String usuario = "";
-  String hora = "1";
-  String min = "30";
+  String horaI = "1";
+  String horaF = "1";
+  String minI = "30";
+  String minF = "30";
+  String nombreEvento = "";
+  String descEvento = "";
   CalendarController _controller;
-  Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;
+  Map<DateTime, List<dynamic>> _events;
   TextEditingController _eventController;
   TextEditingController _eventosController;
+  TextEditingController _descriController;
   Stream events;
   SharedPreferences prefs;
   var _listaMinutos = [
@@ -102,6 +109,7 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
     '11',
     '12'
   ];
+  String numero = "";
 
   @override
   void initState() {
@@ -146,51 +154,8 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
       ),
       body: ListView(
         children: [
-          Container(
-            margin: const EdgeInsets.all(30.0),
-            padding: const EdgeInsets.all(10.0),
-            //margin: EdgeInsets.only(left: 40.0, right: 35.0),
-            decoration: BoxDecoration(
-                color: Colors.yellow[100],
-                border: Border.all(
-                  color: Colors.black,
-                  width: 5,
-                )),
-            child: Text(
-              '\n¿Cuál es el aforo máximo del gimnasio?\n',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            //padding: const EdgeInsets.all(10.0),
-            margin: EdgeInsets.only(left: 70.0, right: 70.0),
-            decoration: BoxDecoration(
-                color: Colors.yellow[100],
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2,
-                )),
-            child: TextField(
-              onChanged: (texto) {
-                cantGente = texto;
-              },
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: ' Escribe la cantidad permitida ',
-                filled: true,
-                fillColor: Color(0xFFFFF3E0),
-                enabledBorder: OutlineInputBorder(
-                  // borderRadius: BorderRadius.all(Radius.circular(150)),
-                  borderSide: BorderSide(color: Colors.black),
-                ), //InputDecoration
-              ),
-            ),
-          ),
           SizedBox(height: 20),
+
           Container(
             margin: EdgeInsets.only(left: 70.0, right: 70.0),
             decoration: BoxDecoration(
@@ -209,6 +174,7 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
               textAlign: TextAlign.center,
             ),
           ),
+
           TableCalendar(
             events: _events,
             initialCalendarFormat: CalendarFormat.month,
@@ -261,18 +227,61 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
           ),
           ..._selectedEvents.map((event) => ListTile(
                 title: Text(
-                  event + "\n",
+                  "\n->  " + event + "   \n",
                   style: TextStyle(
+                    backgroundColor: Colors.blue,
                     fontSize: 30,
                   ),
                   textAlign: TextAlign.center,
                 ),
               )),
-
+          Container(
+            margin: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.all(10.0),
+            //margin: EdgeInsets.only(left: 40.0, right: 35.0),
+            decoration: BoxDecoration(
+                color: Colors.yellow[100],
+                border: Border.all(
+                  color: Colors.black,
+                  width: 5,
+                )),
+            child: Text(
+              '\n¿Cuál es el aforo máximo del gimnasio?\n',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            //padding: const EdgeInsets.all(10.0),
+            margin: EdgeInsets.only(left: 70.0, right: 70.0),
+            decoration: BoxDecoration(
+                color: Colors.yellow[100],
+                border: Border.all(
+                  color: Colors.black,
+                  width: 2,
+                )),
+            child: TextField(
+              onChanged: (texto) {
+                numero = texto;
+              },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: ' Escribe la cantidad permitida ',
+                filled: true,
+                fillColor: Color(0xFFFFF3E0),
+                enabledBorder: OutlineInputBorder(
+                  // borderRadius: BorderRadius.all(Radius.circular(150)),
+                  borderSide: BorderSide(color: Colors.black),
+                ), //InputDecoration
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
           SizedBox(height: 20),
           Container(
-            //margin: const EdgeInsets.all(0.0),
-            //padding: const EdgeInsets.all(0.0),
             margin: EdgeInsets.only(left: 40.0, right: 35.0),
             decoration: BoxDecoration(
                 color: Colors.yellow[100],
@@ -299,6 +308,9 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                   width: 3,
                 )),
             child: TextField(
+              onChanged: (texto) {
+                nombreEvento = texto;
+              },
               controller: _eventosController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
@@ -314,8 +326,6 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
 
           SizedBox(height: 20),
           Container(
-            //margin: const EdgeInsets.all(0.0),
-            //padding: const EdgeInsets.all(0.0),
             margin: EdgeInsets.only(left: 40.0, right: 35.0),
             decoration: BoxDecoration(
                 color: Colors.yellow[100],
@@ -342,7 +352,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                   width: 3,
                 )),
             child: TextField(
-              controller: _eventosController,
+              onChanged: (texto) {
+                descEvento = texto;
+              },
+              controller: _descriController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 hintText: ' Descripción del evento ',
@@ -412,10 +425,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                         }).toList(),
                         onChanged: (_value) => {
                           setState(() {
-                            this.hora = _value;
+                            this.horaI = _value;
                           })
                         },
-                        value: hora,
+                        value: horaI,
                         dropdownColor: Colors.orange[50],
                         isExpanded: false,
                         hint: Text("Hora"),
@@ -442,10 +455,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                         }).toList(),
                         onChanged: (_value) => {
                           setState(() {
-                            this.min = _value;
+                            this.minI = _value;
                           })
                         },
-                        value: min,
+                        value: minI,
                         dropdownColor: Colors.orange[50],
                         isExpanded: false,
                         hint: Text("Minutos"),
@@ -502,10 +515,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                         }).toList(),
                         onChanged: (_value) => {
                           setState(() {
-                            this.hora = _value;
+                            this.horaF = _value;
                           })
                         },
-                        value: hora,
+                        value: horaF,
                         dropdownColor: Colors.orange[50],
                         isExpanded: false,
                         hint: Text("Hora"),
@@ -532,10 +545,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                         }).toList(),
                         onChanged: (_value) => {
                           setState(() {
-                            this.min = _value;
+                            this.minF = _value;
                           })
                         },
-                        value: min,
+                        value: minF,
                         dropdownColor: Colors.orange[50],
                         isExpanded: false,
                         hint: Text("Minutos"),
@@ -591,16 +604,36 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
               color: Colors.lightBlueAccent[100],
               elevation: 30.0,
               onPressed: () {
-                if (_eventosController.text.isEmpty) return;
+                var Fecha = _controller.selectedDay;
+                var diaFecha = Fecha.day;
+                var mesFecha = Fecha.month;
+                var annoFecha = Fecha.year;
+                print('===> $diaFecha / $mesFecha / $annoFecha');
+                int num = int.parse(numero);
+                bool val = validarEvento(diaFecha, mesFecha, annoFecha, horaI,
+                    minI, horaF, minF, nombreEvento, descEvento, num);
+                print("===========> $val");
+                if (val == true) {
+                  if (val == true) {
+                    msjConfirmar(context);
+                  }
+                  if (_eventosController.text.isEmpty) return;
 
-                if (_events[_controller.selectedDay] != null) {
-                  _events[_controller.selectedDay].add(_eventosController.text);
-                } else {
-                  _events[_controller.selectedDay] = [_eventosController.text];
+                  if (_events[_controller.selectedDay] != null) {
+                    _events[_controller.selectedDay]
+                        .add(_eventosController.text);
+                  } else {
+                    _events[_controller.selectedDay] = [
+                      _eventosController.text
+                    ];
+                  }
+                  prefs.setString("eventos", json.encode(encodeMap(_events)));
+                  _eventController.clear();
                 }
-                prefs.setString("eventos", json.encode(encodeMap(_events)));
-                _eventController.clear();
-                msjConfirmar(context);
+
+                if (val == false) {
+                  msjError(context);
+                }
               },
             ),
           ),
@@ -613,6 +646,62 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
     );
   }
 
+  final databaseReference = Firestore.instance;
+
+  void createRecord(DateTime fechaIni, DateTime fechaFin, String titulo,
+      String descripcion, int capacidad) async {
+    var listado = new List(capacidad);
+    DocumentReference ref = await databaseReference.collection("eventos").add({
+      'Fecha Inicio': fechaIni,
+      'Fecha Fin': fechaFin,
+      'Titulo': titulo,
+      'Descripcion': descripcion,
+      'Capacidad': capacidad,
+      'Participantes': listado,
+      'Total participantes': 0,
+    });
+    print("/////////////////////////////////\n" +
+        ref.documentID +
+        "\n/////////////////////////////////////////////////");
+  }
+
+  bool validarEvento(
+      var diaUse,
+      var mesUse,
+      var annoUse,
+      String horaUseI,
+      String minUseI,
+      String horaUSeF,
+      String minUseF,
+      String titulo,
+      String descripcion,
+      int cantidad) {
+    bool esta;
+    int crearHoraI = int.parse(horaUseI);
+    int crearMinI = int.parse(minUseI);
+    int crearHoraF = int.parse(horaUSeF);
+    int crearMinF = int.parse(minUseF);
+    DateTime fechaHoy = DateTime.now();
+    var diaHoy = fechaHoy.day;
+    var mesHoy = fechaHoy.month;
+    var fechaAgendada =
+        DateTime.utc(annoUse, mesUse, diaUse, crearHoraI, crearMinI);
+
+    if (diaHoy == diaUse && mesHoy == mesUse) {
+      esta = false;
+    } else {
+      esta = true;
+    }
+    if (esta == true) {
+      var fechaFin =
+          DateTime.utc(annoUse, mesUse, diaUse, crearHoraF, crearMinF);
+      print(
+          '$diaUse / $mesUse / $annoUse/ $crearHoraI /$crearMinI / $crearHoraF / $crearMinF\n ');
+      createRecord(fechaAgendada, fechaFin, titulo, descripcion, cantidad);
+    }
+    return esta;
+  }
+
   Future msjConfirmar(BuildContext context) {
     return showDialog(
       context: context,
@@ -620,6 +709,26 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
         return AlertDialog(
           title: Text('Exitoso'),
           content: const Text('La reunón se agrego correctamente'),
+          actions: [
+            MaterialButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future msjError(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: const Text('La reunón no se pudo guardar'),
           actions: [
             MaterialButton(
               child: Text('Ok'),

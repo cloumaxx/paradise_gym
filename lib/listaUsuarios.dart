@@ -1,11 +1,10 @@
 import 'dart:core';
-import 'package:meta/meta.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_core_web/firebase_core_web.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +18,10 @@ class PantLista extends StatefulWidget {
 
 class _PantListaState extends State<PantLista> {
   final databaseReference = Firestore.instance;
-
-  String getDAta() {
-    String aux;
+  final databaseReference2 =
+      FirebaseDatabase.instance.reference().child('usuarios');
+  String use;
+/*String aux;
     databaseReference
         .collection('usuarios')
         .getDocuments()
@@ -29,13 +29,35 @@ class _PantListaState extends State<PantLista> {
       snapshot.documents.forEach((f) => print(aux =
           '//////////////////////\n${f.data} \n///////////////////////////////////'));
       // aux = f.data;
+    }).toString();
+    // return aux;*/
+
+  Future<String> getDAta() async {
+    var aux;
+
+    aux = databaseReference
+        .collection('usuarios')
+        .where('CZIoqUKnhK9XERlZ8taA')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print(aux =
+          '//////////////////////\n1) ${f.data} \n///////////////////////////////////'));
     });
+
     return aux;
   }
+/* DocumentReference ref =
+        await databaseReference.collection("usuarios").document("nombre");
+    print("/////////////////////////////////\n" +
+        ref.toString() +
+        "\n/////////////////////////////////////////////////");
+    //
+    */
 
+  final dbRef = FirebaseDatabase.instance.reference().child("usuarios");
   @override
   Widget build(BuildContext context) {
-    String auxiliar = getDAta();
+    var auxiliar = getDAta();
     return Scaffold(
         appBar: AppBar(
           title: Text('PARADISE'),

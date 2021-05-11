@@ -3,6 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +16,7 @@ class PantCalendario extends StatefulWidget {
 }
 
 class _PantCalendarioState extends State<PantCalendario> {
+  final f = new DateFormat('yyyy-MM-dd hh:mm');
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents;

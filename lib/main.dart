@@ -6,18 +6,13 @@ import 'Registro1.dart';
 import 'Menu principal.dart';
 import 'menuAdmin.dart';
 import 'classUsuario.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'listaUsuarios.dart';
 import 'estadoGym.dart';
 import 'dart:core';
-import 'package:meta/meta.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_core_web/firebase_core_web.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -48,6 +43,8 @@ class PantIngreso extends StatefulWidget {
   _PantIngresoState createState() => _PantIngresoState();
 }
 
+//final Future<FirebaseApp> _initialization = Firebase
+
 final databaseReference = Firestore.instance;
 
 bool permitirAux(String usua, String clave) {
@@ -61,7 +58,7 @@ bool permitirAux(String usua, String clave) {
 }
 
 bool permitirIngreso(String usua, String clave, List<classUsuarios> aux) {
-  bool permitirIngr = false;
+  bool permitirIngr = true;
   for (int i = 0; i < aux.length; i++) {
     if (usua == aux[i].getcorreo() && clave == aux[i].getcontrasena()) {
       permitirIngr = true;
@@ -117,7 +114,7 @@ class _PantIngresoState extends State<PantIngreso> {
       snapshot.documents.forEach((f) => print(aux =
           '//////////////////////\n${f.data} \n///////////////////////////////////'));
       // aux = f.data;
-    });
+    }).toString();
     // return aux;
   }
 
@@ -161,6 +158,7 @@ class _PantIngresoState extends State<PantIngreso> {
             ),
           ),
           SizedBox(height: 40),
+          /*
           Container(
             margin: EdgeInsets.only(left: 100.0, right: 100.0),
             decoration:
@@ -196,7 +194,7 @@ class _PantIngresoState extends State<PantIngreso> {
               },
             ),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 30),*/
           Container(
             margin: EdgeInsets.only(left: 100.0, right: 100.0),
             decoration:
@@ -212,6 +210,7 @@ class _PantIngresoState extends State<PantIngreso> {
               elevation: 30.0,
               onPressed: () {
                 getDAta();
+                /*
                 try {
                   final user = auth.signInWithEmailAndPassword(
                       email: usuario, password: contrasena);
@@ -223,9 +222,8 @@ class _PantIngresoState extends State<PantIngreso> {
                   }
                 } catch (e) {
                   msjErroneo(context);
-                }
+                }*/
 
-                /*
                 entrar = permitirIngreso(usuario, contrasena, usersPrint);
                 if (usuario == correoAdmin && contrasena == claveAdmin) {
                   print("correo: $usuario  contrasena: $contrasena");
@@ -242,8 +240,9 @@ class _PantIngresoState extends State<PantIngreso> {
                     ));
                   } else {
                     msjErroneo(context);
-                  }*/
-                //},
+                  }
+                }
+                ;
               },
             ),
           ),
@@ -264,11 +263,11 @@ class _PantIngresoState extends State<PantIngreso> {
                 elevation: 30.0,
 
                 onPressed: () {
-                  print("************************\n $msj .   ");
+                  print("\n************************\n $msj .   ");
 
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantRegistro1(); //PantLista(); //PantRegistro1(); //PantEstadoGym(); // //PantMenPrincipalAdmin();  // //
+                    return new PantLista(); //PantEstadoGym(); // // // //PantRegistro1(); ; // //PantMenPrincipalAdmin();  // //
                   }));
                 },
               )),

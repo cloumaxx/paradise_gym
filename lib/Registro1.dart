@@ -17,6 +17,7 @@ class PantRegistro1 extends StatefulWidget {
 
 class _PantRegistro1State extends State<PantRegistro1> {
   final databaseReference = Firestore.instance;
+
   void createRecord() async {
     DocumentReference ref = await databaseReference.collection("usuarios").add({
       'title': 'Flutter in action',
