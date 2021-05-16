@@ -7,7 +7,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
 class PantLista extends StatefulWidget {
   PantLista({Key key, this.title}) : super(key: key);
 
@@ -57,32 +56,29 @@ class _PantListaState extends State<PantLista> {
   final dbRef = FirebaseDatabase.instance.reference().child("usuarios");
   @override
   Widget build(BuildContext context) {
-    var auxiliar = getDAta();
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('PARADISE'),
-        ),
-        body: ListView(
-          children: [
-            Container(
-                //margin: const EdgeInsets.all(0.0),
-                //padding: const EdgeInsets.all(0.0),
-                margin: EdgeInsets.only(left: 40.0, right: 35.0),
-                decoration: BoxDecoration(
-                    color: Colors.yellow[100],
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 3,
-                    )),
-                child: Text(
-                  '\n$auxiliar\n',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                  textAlign: TextAlign.center,
-                )),
-          ],
-        ));
+    return new Scaffold(
+      appBar: new AppBar(title: Text('Miembros Registrados')),
+      body: new StreamBuilder(
+          stream: Firestore.instance.collection('usuarios').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) const Text('Loading...');
+
+            return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                padding: const EdgeInsets.all(25.0),
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data.documents[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue[50], border: Border.all()),
+                    child: Text(
+                      '\n Nombre: ${ds['Nombre']} ${ds['Apellido']},\n Correo: '
+                      '${ds['Correo']} ,\n Genero: ${ds['Genero']},\n Indentificación: ${ds['identificacion']} : ${ds['numIdent']} \n ',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                });
+          }),
+    );
   }
 }

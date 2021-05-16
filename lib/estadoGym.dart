@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -647,7 +651,6 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
   }
 
   final databaseReference = Firestore.instance;
-
   void createRecord(DateTime fechaIni, DateTime fechaFin, String titulo,
       String descripcion, int capacidad) async {
     var listado = new List(capacidad);
@@ -660,9 +663,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
       'Participantes': listado,
       'Total participantes': 0,
     });
-    print("/////////////////////////////////\n" +
+    /* print("/////////////////////////////////\n" +
         ref.documentID +
         "\n/////////////////////////////////////////////////");
+  */
   }
 
   bool validarEvento(

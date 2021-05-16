@@ -10,9 +10,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'listaUsuarios.dart';
 import 'estadoGym.dart';
 import 'dart:core';
+//import 'package:cloud_functions/cloud_functions.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
 
@@ -96,7 +98,8 @@ Future msjErroneo(BuildContext context) {
 PantRegistro1 objRegistro = new PantRegistro1();
 
 class _PantIngresoState extends State<PantIngreso> {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  //FirebaseFunctions functions = FirebaseFunctions.instance;Firebase
+  //FirebaseAuth auth = FirebaseAuth.instance;
   String msj = " ///////  "; //paraLista().toString();
   String correoAdmin = "paradise_gym@hotmail.com";
   String claveAdmin = "paradise_1234";
@@ -105,6 +108,7 @@ class _PantIngresoState extends State<PantIngreso> {
   String contrasena = "";
   bool entrar = false;
   final myController = TextEditingController();
+
   void getDAta() {
     String aux;
     databaseReference
@@ -267,7 +271,7 @@ class _PantIngresoState extends State<PantIngreso> {
 
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantLista(); //PantEstadoGym(); // // // //PantRegistro1(); ; // //PantMenPrincipalAdmin();  // //
+                    return new PantLista(); //PantRegistro1();  //PantEstadoGym();  ; // //PantMenPrincipalAdmin();  // //
                   }));
                 },
               )),

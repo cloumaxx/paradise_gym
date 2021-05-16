@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/classUsuario.dart';
@@ -20,13 +21,9 @@ class _PantRegistro1State extends State<PantRegistro1> {
 
   void createRecord() async {
     DocumentReference ref = await databaseReference.collection("usuarios").add({
-      'title': 'Flutter in action',
-      'description': 'Mi valor',
       'Nombre': nombre,
       'Apellido': apellido,
-      'Dia': dia,
-      'Mes': mes,
-      'Anno': anno,
+      'Fecha Nacimiento': fechaNacimiento,
       'Celular': cel,
       'identificacion': identificacion,
       'numIdent': numCC,
@@ -40,6 +37,7 @@ class _PantRegistro1State extends State<PantRegistro1> {
   }
 
   @override
+  DateTime fechaNacimiento;
   List<classUsuarios> users = new List<classUsuarios>();
   String msjCrear = "***************************************\n";
   String nombre = "";
@@ -560,7 +558,13 @@ class _PantRegistro1State extends State<PantRegistro1> {
                         correo +
                         "  Contraseña: " +
                         contrasena;
-
+                    int crearAnno = int.parse(anno);
+                    int crearDia = int.parse(dia);
+                    DateTime fechaHoy = DateTime.now();
+                    fechaNacimiento =
+                        DateTime.utc(crearAnno, mesAint(mes), crearDia);
+                    print(
+                        "***************jkkkjd \n$fechaNacimiento\n*****************\n\n  ");
                     classUsuarios objUsuario = new classUsuarios(
                         correo,
                         nombre,
@@ -574,9 +578,8 @@ class _PantRegistro1State extends State<PantRegistro1> {
                         genero,
                         contrasena);
                     users.add(objUsuario);
-                    String j = objUsuario.getapellido();
                     createRecord();
-                    print("********************************\n\n $j ");
+
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (BuildContext context) {
                       return new MyApp(); //PantEstadoGym(); // //PantMenPrincipalAdmin();  // //
@@ -612,19 +615,6 @@ class _PantRegistro1State extends State<PantRegistro1> {
     return completo;
   }
 
-  void agregarUser(
-      String nombre,
-      String apellido,
-      String dia,
-      String mes,
-      String anno,
-      String cel,
-      String identificacion,
-      String numCC,
-      String genero,
-      String correo,
-      String contrasena) {}
-
   Future _ackAlert(BuildContext context) {
     return showDialog(
       context: context,
@@ -647,6 +637,48 @@ class _PantRegistro1State extends State<PantRegistro1> {
 
   List<classUsuarios> devLista() {
     return users;
+  }
+
+  int mesAint(var mes) {
+    int mess;
+    if (mes == 'Enero') {
+      mess = 1;
+    }
+    if (mes == 'Febrero') {
+      mess = 2;
+    }
+    if (mes == 'Marzo') {
+      mess = 3;
+    }
+    if (mes == 'Abril') {
+      mess = 4;
+    }
+    if (mes == 'Mayo') {
+      mess = 5;
+    }
+    if (mes == 'Junio') {
+      mess = 6;
+    }
+    if (mes == 'Julio') {
+      mess = 7;
+    }
+    if (mes == 'Agosto') {
+      mess = 8;
+    }
+    if (mes == 'Septiembre') {
+      mess = 9;
+    }
+    if (mes == 'Octubre') {
+      mess = 10;
+    }
+    if (mes == 'Noviembre') {
+      mess = 11;
+    }
+    if (mes == 'Diciembre') {
+      mess = 12;
+    }
+    print('Mes: $mess');
+    return mess;
   }
 
   Future msjErroneo(BuildContext context) {
