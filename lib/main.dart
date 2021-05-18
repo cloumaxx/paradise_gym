@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'Calendario.dart';
 import 'Registro1.dart';
 import 'Menu principal.dart';
 import 'menuAdmin.dart';
@@ -271,7 +272,7 @@ class _PantIngresoState extends State<PantIngreso> {
 
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantLista(); //PantRegistro1();  //PantEstadoGym();  ; // //PantMenPrincipalAdmin();  // //
+                    return new PantCalendar(); //PantLista(); // PantRegistro1(); ////  ; // //PantMenPrincipalAdmin();  // //
                   }));
                 },
               )),

@@ -68,6 +68,9 @@ class _PantListaState extends State<PantLista> {
                 padding: const EdgeInsets.all(25.0),
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.documents[index];
+                  // ignore: unrelated_type_equality_checks
+                  //if (ds['Nombre'] == "juan") {
+                  // print("~~~~~~~ Entro");
                   return Container(
                     decoration: BoxDecoration(
                         color: Colors.blue[50], border: Border.all()),
