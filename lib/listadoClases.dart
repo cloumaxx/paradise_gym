@@ -1,34 +1,30 @@
+import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import 'package:gym/main.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import 'dart:core';
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-class PantCalendar extends StatefulWidget {
-  PantCalendar({Key key, this.title}) : super(key: key);
+///////////a /////////////////////////////////////////////////////////////////////////////////////
+class PantListClases extends StatefulWidget {
+  PantListClases({Key key, this.title}) : super(key: key);
 
   final String title;
   @override
-  _PantCalendarState createState() => _PantCalendarState();
+  _PantListClasesState createState() => _PantListClasesState();
 }
 
-class _PantCalendarState extends State<PantCalendar> {
+class _PantListClasesState extends State<PantListClases> {
   String nombreUsuario = "carlos";
   String id;
   int totalParticipantes;
   int capacidad;
   @override
   Widget build(BuildContext context) {
-    int aforoMax = 100;
     return Scaffold(
       appBar: AppBar(
         title: Text('PARADISE'),
@@ -92,9 +88,7 @@ class _PantCalendarState extends State<PantCalendar> {
                       if (capacidad == 10) {}
                       elec = index;
                       nombre = ds['Titulo'];
-                      for (int i = 0; i < 10; i++) {
-                        print(ds['Titulo']);
-                      }
+
                       descripcion = ds['Descripcion'];
 
                       ///los date time y asi son para guardar fechas y actualizarlas
@@ -122,7 +116,8 @@ class _PantCalendarState extends State<PantCalendar> {
                           listado,
                           capacidad,
                           auxI,
-                          auxF);
+                          auxF,
+                          capacidad);
                       print("-> $elec");
                     },
 
@@ -156,7 +151,8 @@ class _PantCalendarState extends State<PantCalendar> {
                           listado,
                           capacidad,
                           auxI,
-                          auxF);
+                          auxF,
+                          capacidad);
 
                       ///fijate que uso el elec como si fuera indicador o pues la posicion que eligio el usuario
                       print("------> $elec");
@@ -167,51 +163,39 @@ class _PantCalendarState extends State<PantCalendar> {
     );
   }
 
-  ///esta ventana emergente muestra la informacion mas detallada de cada evento y pregunta si se agrega o no(siempre y cuando aun haya espacio)
-  Future infoClase(
-      BuildContext context,
-      String titulo,
-      String des,
-      var ini,
-      var fin,
-      int lugar,
-      String nombreUsuario,
-      String id,
-      var listado,
-      int capacidad,
-      DateTime fechaIG,
-      DateTime fechaFG) {
+  Future mostrarListado(var lista, int limite) {
+    String listadoImpr = "";
+    var aux = lista;
+    int contador = 0;
+    String claseLlena = "";
+    for (int i = 0; i < limite; i++) {
+      if (aux[i] != null) {
+        listadoImpr += ">> ${i + 1}: " + aux[i] + "\n";
+        contador++;
+        //print("$i : ${aux[i]}");
+      }
+    }
+    if (contador == capacidad - 1) {
+      claseLlena = "Clase llena";
+    } else {
+      claseLlena = "Clase con cupos";
+    }
+    print("-> $lista");
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Descripcion de la clase'),
+          title: Text(
+            'LISTADO\n Estado: $claseLlena',
+            textAlign: TextAlign.center,
+          ),
           content: Text(
-            '-> Titulo: $titulo \n->Descripcion:\n $des \n->Inicio: \n$ini \n->Fin: \n$fin',
+            'Capacidad Maxima: $capacidad \nUsuarios Registrados: $contador \n$listadoImpr \n',
             style: TextStyle(
               fontSize: 20,
             ),
           ),
           actions: [
-            MaterialButton(
-              child: Text(
-                'Agendarse',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () {
-                var diaClase = fechaIG.day;
-                bool confirmarDia = mismoDia(diaClase);
-                if (confirmarDia == true) {
-                  agendarse(titulo, des, fechaIG, fechaFG, nombreUsuario, id,
-                      lugar, listado, capacidad);
-                } else {
-                  msjMismoDia(context);
-                }
-              },
-            ),
             MaterialButton(
               child: Text(
                 'Regresar',
@@ -230,89 +214,66 @@ class _PantCalendarState extends State<PantCalendar> {
     );
   }
 
-  ///este metodo se encarga de actualizar la base de datos, toca poner todos los datos de nuevo ya que si no se borran y solo deja el que pongas en el
-  ///como tal no actualiza si no que remplaza
-  Future agendarse(
+  Future infoClase(
+      BuildContext context,
       String titulo,
       String des,
-      DateTime fechaini,
-      DateTime fechafin,
+      var ini,
+      var fin,
+      int lugar,
       String nombreUsuario,
       String id,
-      int lugar,
       var listado,
-      int capacidad) async {
-    int lugarNuevo = lugar + 1;
-    //print("lugarNuevo= $lugarNuevo , capacidad: $capacidad");
-    if (lugarNuevo < capacidad) {
-      listado[lugar] = nombreUsuario;
-      print('id: $listado ');
-      String lugarUsar = lugar.toString();
-      await databaseReference.collection('eventos').document(id).setData({
-        'Capacidad': capacidad,
-        'Titulo': titulo,
-        'Descripcion': des,
-        'Fecha Inicio': fechaini,
-        'Fecha Fin': fechafin,
-        'Total participantes': lugarNuevo,
-        'Participantes': listado,
-      });
-    } else {
-      msjClaseLlena(context);
+      int capacidad,
+      DateTime fechaIG,
+      DateTime fechaFG,
+      int cantidadRegistrados) {
+    var aux = listado;
+    int contador = 0;
+    for (int i = 0; i < capacidad; i++) {
+      if (aux[i] != null) {
+        contador++;
+      }
     }
-  }
 
-  bool mismoDia(var fechaClase) {
-    DateTime fecha = DateTime.now();
-    var hoy = fecha.day;
-    print("****** hoy: $hoy, fecha clase: $fechaClase");
-    if (fechaClase == hoy) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Future msjClaseLlena(BuildContext context) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
-          content: const Text('La clase esta llena'),
+          title: Text('Descripcion de la clase'),
+          content: Text(
+            '-> Titulo: $titulo \n->Descripcion:\n $des \n->Inicio: \n$ini \n->Fin: \n$fin\n->Capacidad Maxima: $capacidad\n->Usuarios Registrados: $contador',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
           actions: [
             MaterialButton(
-              child: Text('Ok'),
+                child: Text(
+                  'Ver participantes',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 20,
+                  ),
+                ),
+                onPressed: () {
+                  mostrarListado(listado, capacidad);
+                }),
+            MaterialButton(
+              child: Text(
+                'Regresar',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future msjMismoDia(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: const Text(
-              'Recuerda que solo puedes programar citas un día antes de estas'),
-          actions: [
-            MaterialButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            )
           ],
         );
       },
     );
   }
 }
-
-//_Pantalla3State

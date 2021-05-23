@@ -234,7 +234,7 @@ class _PantIngresoState extends State<PantIngreso> {
                   print("correo: $usuario  contrasena: $contrasena");
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        PantMenPrincipalAdmin(correoUse: usuario),
+                        PantMenPrincipalAdmin(codigo: usuario),
                   ));
                 } else {
                   if (entrar == true) {
@@ -272,7 +272,7 @@ class _PantIngresoState extends State<PantIngreso> {
 
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantCalendar(); //PantLista(); // PantRegistro1(); ////  ; // //PantMenPrincipalAdmin();  // //
+                    return new PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
                   }));
                 },
               )),

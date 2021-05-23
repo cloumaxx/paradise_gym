@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'Calendario.dart';
-import 'perfilAdmin.dart';
+import 'package:gym/PerfilUsuario.dart';
 import 'CalendarioAdmin.dart';
 import 'estadoGym.dart';
+import 'listadoClases.dart';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantMenPrincipalAdmin extends StatefulWidget {
-  PantMenPrincipalAdmin({Key key, this.title, this.correoUse})
-      : super(key: key);
-  final String correoUse;
+  PantMenPrincipalAdmin({Key key, this.title, this.codigo}) : super(key: key);
+  final String codigo;
 
   final String title;
   @override
@@ -70,25 +70,9 @@ String numeroDocumento(String correo) {
 
 ///****************************************************************************************************************************
 class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
-  TextEditingController _controller3;
-  @override
-  void initState() {
-    _controller3 = TextEditingController(text: this.widget.correoUse);
-
-    super.initState();
-  }
-
+  String id = "";
   @override
   Widget build(BuildContext context) {
-    String correoUtil = _controller3.text;
-    String nombrePant = devNombre(correoUtil);
-    String edadPant = devEdad(correoUtil);
-    String cumplePant = devCumple(correoUtil);
-    String IdentPant = numeroDocumento(correoUtil);
-    String Correo = correoUtil;
-    String NunContactPant = devContacto(correoUtil);
-    String generoPant = devGenero(correoUtil);
-
     String nombre2 = "Administrador";
     String bienvenida = "Bienvenido ";
     String mensajeAgua = "\n¿Qué deseas hacer?  ";
@@ -116,7 +100,7 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
               minWidth: 20.0,
               height: 50.0,
               disabledColor: Colors.red,
-              child: Text('Estado del gimnasio',
+              child: Text('Agendar clases',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.red,
@@ -138,15 +122,15 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
               minWidth: 20.0,
               height: 50.0,
               disabledColor: Colors.cyan[100],
-              child: Text('Revisar agenda',
+              child: Text('Revisar clases',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.redAccent,
               elevation: 30.0,
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute<Null>(builder: (BuildContext context) {
-                  return new PantCalendario();
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext context) {
+                  return new PantListClases();
                 }));
               },
             ),
@@ -167,34 +151,11 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
               elevation: 30.0,
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PantPerfilAdmin(
-                    nombre: nombrePant,
-                    edad: edadPant,
-                    cumple: cumplePant,
-                    Ident: IdentPant,
-                    Correo: Correo,
-                    NunContact: NunContactPant,
-                    genero: generoPant,
+                  builder: (context) => PantPerfilUsuario(
+                    codigo: id,
                   ),
                 ));
               },
-            ),
-          ),
-          SizedBox(height: 40),
-          Container(
-            margin: EdgeInsets.only(left: 50.0, right: 50.0),
-            decoration:
-                BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Configuración',
-                  style: TextStyle(fontSize: 20, color: Colors.black)),
-              splashColor: Colors.lightBlue,
-              color: Colors.orange,
-              elevation: 30.0,
-              onPressed: () {},
             ),
           ),
           SizedBox(height: 40),

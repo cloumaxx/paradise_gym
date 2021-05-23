@@ -250,7 +250,7 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                   width: 5,
                 )),
             child: Text(
-              '\n¿Cuál es el aforo máximo del gimnasio?\n',
+              '\n¿De cuantas personas es la clase?\n',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 20,

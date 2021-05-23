@@ -17,20 +17,6 @@ class PantLista extends StatefulWidget {
 
 class _PantListaState extends State<PantLista> {
   final databaseReference = Firestore.instance;
-  final databaseReference2 =
-      FirebaseDatabase.instance.reference().child('usuarios');
-  String use;
-/*String aux;
-    databaseReference
-        .collection('usuarios')
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print(aux =
-          '//////////////////////\n${f.data} \n///////////////////////////////////'));
-      // aux = f.data;
-    }).toString();
-    // return aux;*/
-
   Future<String> getDAta() async {
     var aux;
 
@@ -45,13 +31,6 @@ class _PantListaState extends State<PantLista> {
 
     return aux;
   }
-/* DocumentReference ref =
-        await databaseReference.collection("usuarios").document("nombre");
-    print("/////////////////////////////////\n" +
-        ref.toString() +
-        "\n/////////////////////////////////////////////////");
-    //
-    */
 
   final dbRef = FirebaseDatabase.instance.reference().child("usuarios");
   @override

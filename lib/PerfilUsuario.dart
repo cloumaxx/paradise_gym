@@ -5,65 +5,17 @@ import 'Calendario.dart';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantPerfilUsuario extends StatefulWidget {
-  PantPerfilUsuario(
-      {Key key,
-      this.title,
-      this.nombre,
-      this.edad,
-      this.cumple,
-      this.Ident,
-      this.Correo,
-      this.NunContact,
-      this.genero})
-      : super(key: key);
-  final String nombre;
-  final String edad;
-  final String cumple;
-  final String Ident;
-  final String Correo;
-  final String NunContact;
-  final String genero;
+  PantPerfilUsuario({Key key, this.title, this.codigo}) : super(key: key);
+  final String codigo;
   final String title;
   @override
   _PantPerfilUsuarioState createState() => _PantPerfilUsuarioState();
 }
 
 class _PantPerfilUsuarioState extends State<PantPerfilUsuario> {
-  TextEditingController _controllerNomb;
-  TextEditingController _controllerEdad;
-  TextEditingController _controllerCumple;
-  TextEditingController _controllerIdent;
-  TextEditingController _controllerCorreo;
-  TextEditingController _controllerNum;
-  TextEditingController _controllerGenero;
-
-  @override
-  void initState() {
-    _controllerNomb = TextEditingController(text: this.widget.nombre);
-    _controllerEdad = TextEditingController(text: this.widget.edad);
-    _controllerCumple = TextEditingController(text: this.widget.cumple);
-    _controllerIdent = TextEditingController(text: this.widget.Ident);
-    _controllerCorreo = TextEditingController(text: this.widget.Correo);
-    _controllerNum = TextEditingController(text: this.widget.NunContact);
-    _controllerGenero = TextEditingController(text: this.widget.genero);
-
-    super.initState();
-  }
-
+  String info = "";
   @override
   Widget build(BuildContext context) {
-    String nombre = _controllerNomb.text;
-    String correo = _controllerCorreo.text;
-    String edad = _controllerEdad.text;
-    String cumple1 = _controllerEdad.text;
-    String contacto = _controllerNum.text;
-    String genero = _controllerGenero.text;
-    String cumple = "Fecha de Nacimiento: " + cumple1;
-    String numeroDocumento = _controllerIdent.text;
-
-    String info =
-        "Información personal:\nNombre: $nombre\nEdad:$edad \n$cumple\nIdentificación: $numeroDocumento\nCorreo: $correo\nNúmero de contacto: $contacto";
-
     return Scaffold(
       appBar: AppBar(
         title: Text('PARADISE'),

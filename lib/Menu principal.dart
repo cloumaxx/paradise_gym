@@ -84,14 +84,7 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
   Widget build(BuildContext context) {
     String nombre = _controller2.text;
     String correoUtil = _controller3.text;
-
-    String nombrePant = devNombre(correoUtil);
-    String edadPant = devEdad(correoUtil);
-    String cumplePant = devCumple(correoUtil);
-    String IdentPant = numeroDocumento(correoUtil);
-    String Correo = correoUtil;
-    String NunContactPant = devContacto(correoUtil);
-    String generoPant = devGenero(correoUtil);
+    String id = "";
 
     /////////////////////////////////////////////
 
@@ -151,13 +144,7 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => PantPerfilUsuario(
-                    nombre: nombrePant,
-                    edad: edadPant,
-                    cumple: cumplePant,
-                    Ident: IdentPant,
-                    Correo: Correo,
-                    NunContact: NunContactPant,
-                    genero: generoPant,
+                    codigo: id,
                   ),
                 ));
               },
