@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gym/perfilAdmin.dart';
 import 'Calendario.dart';
 import 'Registro1.dart';
 import 'Menu principal.dart';
@@ -49,26 +51,7 @@ class PantIngreso extends StatefulWidget {
 //final Future<FirebaseApp> _initialization = Firebase
 
 final databaseReference = Firestore.instance;
-
-bool permitirAux(String usua, String clave) {
-  bool permitirIngr = false;
-
-  if (usua != "" && clave != "") {
-    permitirIngr = true;
-  }
-
-  return permitirIngr;
-}
-
-bool permitirIngreso(String usua, String clave, List<classUsuarios> aux) {
-  bool permitirIngr = true;
-  for (int i = 0; i < aux.length; i++) {
-    if (usua == aux[i].getcorreo() && clave == aux[i].getcontrasena()) {
-      permitirIngr = true;
-    }
-  }
-  return permitirIngr;
-}
+final databaseReference2 = FirebaseDatabase.instance.reference();
 
 String claveContrasena(String correo) {
   String clave = " ";
@@ -96,7 +79,14 @@ Future msjErroneo(BuildContext context) {
   );
 }
 
+int i = 0;
 PantRegistro1 objRegistro = new PantRegistro1();
+
+bool verificar(String usuario) {
+  bool entro = false;
+
+  return entro;
+}
 
 class _PantIngresoState extends State<PantIngreso> {
   //FirebaseFunctions functions = FirebaseFunctions.instance;Firebase
@@ -105,23 +95,13 @@ class _PantIngresoState extends State<PantIngreso> {
   String correoAdmin = "paradise_gym@hotmail.com";
   String claveAdmin = "paradise_1234";
   String nombre = " ";
+  String name = "";
   String usuario = " ";
   String contrasena = "";
   bool entrar = false;
   final myController = TextEditingController();
-
-  void getDAta() {
-    String aux;
-    databaseReference
-        .collection('usuarios')
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print(aux =
-          '//////////////////////\n${f.data} \n///////////////////////////////////'));
-      // aux = f.data;
-    }).toString();
-    // return aux;
-  }
+  int limite;
+  int cont = 0;
 
   void createRecord() async {} //////////////////////////////////
   @override
@@ -163,43 +143,6 @@ class _PantIngresoState extends State<PantIngreso> {
             ),
           ),
           SizedBox(height: 40),
-          /*
-          Container(
-            margin: EdgeInsets.only(left: 100.0, right: 100.0),
-            decoration:
-                BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.orange,
-              child: Text('Ingresar Aux',
-                  style: TextStyle(fontSize: 20, color: Colors.black)),
-              splashColor: Colors.deepOrange,
-              color: Colors.yellowAccent,
-              elevation: 30.0,
-              onPressed: () {
-                entrar = permitirAux(usuario, contrasena);
-                if (usuario == correoAdmin && contrasena == claveAdmin) {
-                  print("correo: $usuario  contrasena: $contrasena");
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        PantMenPrincipalAdmin(correoUse: usuario),
-                  ));
-                } else {
-                  if (entrar == true) {
-                    print("correo: $usuario  contrasena: $contrasena");
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          PantMenPrincipal(nombre: nombre, correoUse: usuario),
-                    ));
-                  } else {
-                    msjErroneo(context);
-                  }
-                }
-              },
-            ),
-          ),
-          SizedBox(height: 30),*/
           Container(
             margin: EdgeInsets.only(left: 100.0, right: 100.0),
             decoration:
@@ -214,40 +157,39 @@ class _PantIngresoState extends State<PantIngreso> {
               color: Colors.yellowAccent,
               elevation: 30.0,
               onPressed: () {
-                getDAta();
-                /*
-                try {
-                  final user = auth.signInWithEmailAndPassword(
-                      email: usuario, password: contrasena);
-                  if (user != null) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          PantMenPrincipal(nombre: nombre, correoUse: usuario),
-                    ));
+                databaseReference
+                    .collection('usuarios')
+                    .getDocuments()
+                    .then((QuerySnapshot snapshot) {
+                  limite = snapshot.documents.length;
+                  for (int i = 0; i < limite; i++) {
+                    DocumentSnapshot ds = snapshot.documents[i];
+                    if (ds["Correo"] == usuario &&
+                        ds["Contrasena"] == contrasena) {
+                      name = ds["Nombre"] + ds["Apellido"];
+                      print("$i >> ${ds.documentID}");
+                      if (ds["Correo"] == correoAdmin &&
+                          ds["Contrasena"] == claveAdmin) {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return new PantMenPrincipalAdmin(
+                              codigo: ds
+                                  .documentID); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                        }));
+                      } else {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return new PantMenPrincipal(
+                            codigo: ds.documentID,
+                            nameUsua: name,
+                          ); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                        }));
+                      }
+                    } else {
+                      //msjErroneo(context);
+                    }
                   }
-                } catch (e) {
-                  msjErroneo(context);
-                }*/
-
-                entrar = permitirIngreso(usuario, contrasena, usersPrint);
-                if (usuario == correoAdmin && contrasena == claveAdmin) {
-                  print("correo: $usuario  contrasena: $contrasena");
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        PantMenPrincipalAdmin(codigo: usuario),
-                  ));
-                } else {
-                  if (entrar == true) {
-                    print("correo: $usuario  contrasena: $contrasena");
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          PantMenPrincipal(nombre: nombre, correoUse: usuario),
-                    ));
-                  } else {
-                    msjErroneo(context);
-                  }
-                }
-                ;
+                });
               },
             ),
           ),
@@ -268,11 +210,11 @@ class _PantIngresoState extends State<PantIngreso> {
                 elevation: 30.0,
 
                 onPressed: () {
-                  print("\n************************\n $msj .   ");
-
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                    return new PantLista(); //PantRegistro1(); //PantPerfilAdmin(
+                    // codigo:
+                    //   ""); // //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
                   }));
                 },
               )),

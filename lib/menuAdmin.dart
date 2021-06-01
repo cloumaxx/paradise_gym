@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:gym/perfilAdmin.dart';
 import 'main.dart';
 import 'Calendario.dart';
 import 'package:gym/PerfilUsuario.dart';
@@ -8,74 +11,25 @@ import 'listadoClases.dart';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantMenPrincipalAdmin extends StatefulWidget {
-  PantMenPrincipalAdmin({Key key, this.title, this.codigo}) : super(key: key);
+  PantMenPrincipalAdmin({Key key, this.title, this.codigo});
   final String codigo;
 
   final String title;
   @override
-  _PantMenPrincipalAdminState createState() => _PantMenPrincipalAdminState();
-}
-
-///********************************************************************
-String devNombre(String correo) {
-  String nombre1 = "";
-  String apellido1 = "";
-  String nombreCompleto = "";
-
-  nombreCompleto = nombre1 + apellido1;
-  return nombreCompleto;
-}
-
-String devEdad(String correo) {
-  String edad = "";
-
-  return edad;
-}
-
-String devCumple1(String correo) {
-  String edad = "";
-  return edad;
-}
-
-String devContacto(String correo) {
-  String numeroCel = "";
-
-  return numeroCel;
-}
-
-String devGenero(String correo) {
-  String genero = "";
-
-  return genero;
-}
-
-String devCumple(String correo) {
-  String dia1 = "";
-  String mes1 = "";
-  String anno1 = "";
-  String fecha = "";
-
-  fecha = dia1 + "/" + mes1 + "/" + anno1;
-  return fecha;
-}
-
-String numeroDocumento(String correo) {
-  String tipo = "";
-  String numero = "";
-  String devolucion = "";
-
-  devolucion = " " + tipo + " : " + numero;
-  return devolucion;
+  _PantMenPrincipalAdminState createState() =>
+      _PantMenPrincipalAdminState(code: codigo);
 }
 
 ///****************************************************************************************************************************
 class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
-  String id = "";
+  final String code;
+  _PantMenPrincipalAdminState({this.code});
+
   @override
   Widget build(BuildContext context) {
     String nombre2 = "Administrador";
     String bienvenida = "Bienvenido ";
-    String mensajeAgua = "\n¿Qué deseas hacer?  ";
+    String mensajeAgua = "\n¿Qué deseas hacer? ";
     String msjNombre = bienvenida + nombre2 + mensajeAgua;
     return Scaffold(
       appBar: AppBar(
@@ -150,9 +104,11 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
               color: Colors.deepOrange,
               elevation: 30.0,
               onPressed: () {
+                print('************\n\n $code\n\n ************************');
+
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PantPerfilUsuario(
-                    codigo: id,
+                  builder: (context) => PantPerfilAdmin(
+                    codigo: code,
                   ),
                 ));
               },
@@ -173,6 +129,7 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
               color: Colors.yellow,
               elevation: 30.0,
               onPressed: () {
+                print('************\n\n $code\n\n ************************');
                 Navigator.of(context).push(
                     MaterialPageRoute<Null>(builder: (BuildContext context) {
                   return new PantIngreso();

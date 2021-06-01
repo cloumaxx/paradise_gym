@@ -14,15 +14,16 @@ import 'dart:core';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantCalendar extends StatefulWidget {
-  PantCalendar({Key key, this.title}) : super(key: key);
-
+  PantCalendar({Key key, this.title, this.nombre}) : super(key: key);
+  final String nombre;
   final String title;
   @override
-  _PantCalendarState createState() => _PantCalendarState();
+  _PantCalendarState createState() => _PantCalendarState(nombreUsuario: nombre);
 }
 
 class _PantCalendarState extends State<PantCalendar> {
-  String nombreUsuario = "carlos";
+  String nombreUsuario = "";
+  _PantCalendarState({this.nombreUsuario});
   String id;
   int totalParticipantes;
   int capacidad;
@@ -31,7 +32,7 @@ class _PantCalendarState extends State<PantCalendar> {
     int aforoMax = 100;
     return Scaffold(
       appBar: AppBar(
-        title: Text('PARADISE'),
+        title: Text('PARADISE $nombreUsuario'),
       ),
       ///// mando todo a un Stream builder porque no se como mas ponerlo
       body: new StreamBuilder(
@@ -244,7 +245,7 @@ class _PantCalendarState extends State<PantCalendar> {
       int capacidad) async {
     int lugarNuevo = lugar + 1;
     //print("lugarNuevo= $lugarNuevo , capacidad: $capacidad");
-    if (lugarNuevo < capacidad) {
+    if (lugarNuevo <= capacidad) {
       listado[lugar] = nombreUsuario;
       print('id: $listado ');
       String lugarUsar = lugar.toString();

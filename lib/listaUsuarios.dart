@@ -22,7 +22,7 @@ class _PantListaState extends State<PantLista> {
 
     aux = databaseReference
         .collection('usuarios')
-        .where('CZIoqUKnhK9XERlZ8taA')
+        .where('dtN6lwu4zguSMVWUjw66')
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) => print(aux =
@@ -32,16 +32,16 @@ class _PantListaState extends State<PantLista> {
     return aux;
   }
 
-  final dbRef = FirebaseDatabase.instance.reference().child("usuarios");
   @override
   Widget build(BuildContext context) {
+    bool auxiliar;
+
     return new Scaffold(
       appBar: new AppBar(title: Text('Miembros Registrados')),
       body: new StreamBuilder(
           stream: Firestore.instance.collection('usuarios').snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) const Text('Loading...');
-
             return ListView.builder(
                 itemCount: snapshot.data.documents.length,
                 padding: const EdgeInsets.all(25.0),
@@ -50,6 +50,7 @@ class _PantListaState extends State<PantLista> {
                   // ignore: unrelated_type_equality_checks
                   //if (ds['Nombre'] == "juan") {
                   // print("~~~~~~~ Entro");
+                  print("---->Entro?     $auxiliar");
                   return Container(
                     decoration: BoxDecoration(
                         color: Colors.blue[50], border: Border.all()),

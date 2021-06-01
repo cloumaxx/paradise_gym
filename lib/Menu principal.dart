@@ -8,82 +8,24 @@ import 'Calendario.dart';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantMenPrincipal extends StatefulWidget {
-  PantMenPrincipal({Key key, this.title, this.nombre, this.correoUse})
+  PantMenPrincipal({Key key, this.title, this.codigo, this.nameUsua})
       : super(key: key);
-  final String nombre;
-  final String correoUse;
+  final String codigo;
+  final String nameUsua;
   final String title;
   @override
-  _PantMenPrincipalState createState() => _PantMenPrincipalState();
+  _PantMenPrincipalState createState() =>
+      _PantMenPrincipalState(code: codigo, nombre: nameUsua);
 } /////////////////////////////////
-
-String devNombre(String correo) {
-  String nombre1 = "";
-  String apellido1 = "";
-  String nombreCompleto = "";
-
-  nombreCompleto = nombre1 + apellido1;
-  return nombreCompleto;
-}
-
-String devEdad(String correo) {
-  String edad = "";
-
-  return edad;
-}
-
-String devCumple1(String correo) {
-  String edad = "";
-  return edad;
-}
-
-String devContacto(String correo) {
-  String numeroCel = "";
-
-  return numeroCel;
-}
-
-String devGenero(String correo) {
-  String genero = "";
-
-  return genero;
-}
-
-String devCumple(String correo) {
-  String dia1 = "";
-  String mes1 = "";
-  String anno1 = "";
-  String fecha = "";
-
-  fecha = dia1 + "/" + mes1 + "/" + anno1;
-  return fecha;
-}
-
-String numeroDocumento(String correo) {
-  String tipo = "";
-  String numero = "";
-  String devolucion = "";
-
-  devolucion = " " + tipo + " : " + numero;
-  return devolucion;
-}
 
 /////////////////////////
 class _PantMenPrincipalState extends State<PantMenPrincipal> {
-  TextEditingController _controller2;
-  TextEditingController _controller3;
-  @override
-  void initState() {
-    _controller2 = TextEditingController(text: this.widget.nombre);
-    _controller3 = TextEditingController(text: this.widget.correoUse);
-
-    super.initState();
-  }
-
+  final String code;
+  final String nombre;
+  _PantMenPrincipalState({this.code, this.nombre});
   @override
   Widget build(BuildContext context) {
-    String nombre = _controller2.text;
-    String correoUtil = _controller3.text;
+    String correoUtil = "";
     String id = "";
 
     /////////////////////////////////////////////
@@ -122,7 +64,9 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (BuildContext context) {
-                  return new PantCalendar();
+                  return new PantCalendar(
+                    nombre: nombre,
+                  );
                 }));
               },
             ),
@@ -144,7 +88,7 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => PantPerfilUsuario(
-                    codigo: id,
+                    codigo: code,
                   ),
                 ));
               },
