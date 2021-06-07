@@ -31,7 +31,7 @@ class _PantPerfilAdminState extends State<PantPerfilAdmin> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('$codes'),
+        title: Text('PARADISE'),
       ),
       body: ListView(
         children: [

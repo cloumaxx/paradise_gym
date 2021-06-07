@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gym/PerfilUsuario.dart';
+import 'listaUsuarios.dart';
 import 'main.dart';
 import 'Calendario.dart';
 
@@ -50,22 +51,21 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
           SizedBox(height: 50),
           Container(
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
-            decoration:
-                BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Agendar Entrenamiento',
-                  style: TextStyle(fontSize: 20, color: Colors.black)),
+            //decoration:
+            //BoxDecoration(color: Colors.orange[50], border: Border.all()),
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.calendar_today_sharp),
+              label: Text('Agendar Entrenamiento',
+                  style: TextStyle(fontSize: 21, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.redAccent,
-              elevation: 30.0,
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (BuildContext context) {
                   return new PantCalendar(
                     nombre: nombre,
+                    codigo: code,
                   );
                 }));
               },
@@ -76,11 +76,10 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Ver tu perfil',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.person),
+              label: Text('Ver tu perfil',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.deepOrange,
@@ -99,16 +98,22 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Configuración',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.check),
+              label: Text('Validar asistencia',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.orange,
               elevation: 30.0,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(// cabio de pantalla
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return new PantLista(
+                      nombreUsar:
+                          nombre); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                }));
+              },
             ),
           ),
           SizedBox(height: 35),
@@ -116,11 +121,10 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.deepPurple[400],
-              child: Text('Cerrar Sesión',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.exit_to_app),
+              label: Text('Cerrar Sesión',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.yellow,

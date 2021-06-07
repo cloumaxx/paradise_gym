@@ -50,11 +50,10 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.red,
-              child: Text('Agendar clases',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.calendar_today_outlined),
+              label: Text('Agendar clases',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.red,
@@ -72,11 +71,10 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Revisar clases',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.list_alt),
+              label: Text('Revisar clases',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.redAccent,
@@ -94,11 +92,10 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.cyan[100],
-              child: Text('Ver tu perfil',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.person),
+              label: Text('Ver tu perfil',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.deepOrange,
@@ -119,17 +116,15 @@ class _PantMenPrincipalAdminState extends State<PantMenPrincipalAdmin> {
             margin: EdgeInsets.only(left: 50.0, right: 50.0),
             decoration:
                 BoxDecoration(color: Colors.orange[50], border: Border.all()),
-            child: MaterialButton(
-              minWidth: 20.0,
-              height: 50.0,
-              disabledColor: Colors.deepPurple[400],
-              child: Text('Cerrar Sesión',
+            child: RaisedButton.icon(
+              padding: new EdgeInsets.all(15),
+              icon: Icon(Icons.exit_to_app),
+              label: Text('Cerrar Sesión',
                   style: TextStyle(fontSize: 20, color: Colors.black)),
               splashColor: Colors.lightBlue,
               color: Colors.yellow,
               elevation: 30.0,
               onPressed: () {
-                print('************\n\n $code\n\n ************************');
                 Navigator.of(context).push(
                     MaterialPageRoute<Null>(builder: (BuildContext context) {
                   return new PantIngreso();

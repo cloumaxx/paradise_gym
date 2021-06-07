@@ -482,6 +482,7 @@ class _PantRegistro1State extends State<PantRegistro1> {
               onChanged: (texto1) {
                 contrasena = texto1;
               },
+              obscureText: true,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'Escribe la clave',
@@ -503,6 +504,7 @@ class _PantRegistro1State extends State<PantRegistro1> {
                 confirmarContrasena = texto2;
               },
               keyboardType: TextInputType.emailAddress,
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Vuelve a escribir la clave',
                 hintText: ' Vuelve a escribir la clave ',

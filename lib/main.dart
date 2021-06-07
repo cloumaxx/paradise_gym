@@ -1,7 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gym/perfilAdmin.dart';
 import 'Calendario.dart';
@@ -79,14 +77,27 @@ Future msjErroneo(BuildContext context) {
   );
 }
 
-int i = 0;
-PantRegistro1 objRegistro = new PantRegistro1();
-
-bool verificar(String usuario) {
-  bool entro = false;
-
-  return entro;
+Future msjVacio(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: const Text('Alguna casilla esta vacia'),
+        actions: [
+          MaterialButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
+
+PantRegistro1 objRegistro = new PantRegistro1();
 
 class _PantIngresoState extends State<PantIngreso> {
   //FirebaseFunctions functions = FirebaseFunctions.instance;Firebase
@@ -102,7 +113,8 @@ class _PantIngresoState extends State<PantIngreso> {
   final myController = TextEditingController();
   int limite;
   int cont = 0;
-
+  int i = 0;
+  bool ingreso = false;
   void createRecord() async {} //////////////////////////////////
   @override
   Widget build(BuildContext context) {
@@ -112,12 +124,16 @@ class _PantIngresoState extends State<PantIngreso> {
       ),
       body: ListView(
         children: [
-          SizedBox(height: 10),
+          SizedBox(height: 15),
           Container(
+            margin: EdgeInsets.only(left: 80.0, right: 80.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 3,
+              ),
+            ),
             child: Image.asset(
               'assets/logo.png',
-              height: 300,
-              width: 300,
             ),
           ),
           SizedBox(height: 5),
@@ -129,6 +145,7 @@ class _PantIngresoState extends State<PantIngreso> {
                 usuario = texto;
               },
               decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.email),
                   hintText: 'Escribe tu correo'), //InputDecoration
             ),
           ),
@@ -139,7 +156,9 @@ class _PantIngresoState extends State<PantIngreso> {
                 contrasena = texto;
               },
               obscureText: true,
-              decoration: InputDecoration(hintText: 'Escribe tu contraseña'),
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.security),
+                  hintText: 'Escribe tu contraseña'),
             ),
           ),
           SizedBox(height: 40),
@@ -157,39 +176,51 @@ class _PantIngresoState extends State<PantIngreso> {
               color: Colors.yellowAccent,
               elevation: 30.0,
               onPressed: () {
-                databaseReference
-                    .collection('usuarios')
-                    .getDocuments()
-                    .then((QuerySnapshot snapshot) {
-                  limite = snapshot.documents.length;
-                  for (int i = 0; i < limite; i++) {
-                    DocumentSnapshot ds = snapshot.documents[i];
-                    if (ds["Correo"] == usuario &&
-                        ds["Contrasena"] == contrasena) {
-                      name = ds["Nombre"] + ds["Apellido"];
-                      print("$i >> ${ds.documentID}");
-                      if (ds["Correo"] == correoAdmin &&
-                          ds["Contrasena"] == claveAdmin) {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return new PantMenPrincipalAdmin(
-                              codigo: ds
-                                  .documentID); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
-                        }));
-                      } else {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return new PantMenPrincipal(
-                            codigo: ds.documentID,
-                            nameUsua: name,
-                          ); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
-                        }));
+                print(">>>>>> usuario: $usuario contraseña $contrasena ");
+                if (usuario == "" || contrasena == "") {
+                  msjVacio(context);
+                } else {
+                  databaseReference
+                      .collection('usuarios')
+                      .getDocuments()
+                      .then((QuerySnapshot snapshot) {
+                    limite = snapshot.documents.length; //limite
+                    for (int i = 0; i < limite; i++) {
+                      // recorre cada lista
+                      DocumentSnapshot ds = snapshot
+                          .documents[i]; // muestra cada valor de la lista
+                      if (ds["Correo"] == usuario &&
+                          ds["Contrasena"] == contrasena) {
+                        name = "${ds["Nombre"]} ${ds["Apellido"]}";
+
+                        print("$i >> ${ds.documentID} , \n $name");
+
+                        if (ds["Correo"] == correoAdmin &&
+
+                            /// condicionales para ver como ingresa
+                            ds["Contrasena"] == claveAdmin) {
+                          Navigator.of(context).push(// cabio de pantalla
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                            return new PantMenPrincipalAdmin(
+                                codigo: ds
+                                    .documentID); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                          }));
+                          ingreso = true;
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return new PantMenPrincipal(
+                              codigo: ds.documentID,
+                              nameUsua: name,
+                            ); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1();
+                          }));
+                          ingreso = true;
+                        }
                       }
-                    } else {
-                      //msjErroneo(context);
                     }
-                  }
-                });
+                  });
+                }
               },
             ),
           ),
@@ -212,9 +243,11 @@ class _PantIngresoState extends State<PantIngreso> {
                 onPressed: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantLista(); //PantRegistro1(); //PantPerfilAdmin(
+                    return new PantLista(); //PantMenPrincipalAdmin(
+                    //  codigo: "",
+                    //); //PantMenPrincipalAdmin(); //PantRegistro1(); // // //PantPerfilAdmin(
                     // codigo:
-                    //   ""); // //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                    //   ""); // //PantLista(); ////PantCalendar(); //// PantRegistro1(); ////  ; // // // //
                   }));
                 },
               )),
@@ -225,8 +258,5 @@ class _PantIngresoState extends State<PantIngreso> {
   }
 
   ///****************************************************************************************************
-  String devNombre(String correo) {
-    String nombre;
-    return nombre;
-  }
+
 } //_Pantalla3State

@@ -111,7 +111,17 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
     '9',
     '10',
     '11',
-    '12'
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '20',
+    '21',
+    '22',
+    '23'
   ];
   String numero = "";
 

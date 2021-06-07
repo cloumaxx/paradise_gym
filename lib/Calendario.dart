@@ -1,29 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gym/main.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:intl/intl.dart';
-
 import 'dart:core';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PantCalendar extends StatefulWidget {
-  PantCalendar({Key key, this.title, this.nombre}) : super(key: key);
+  PantCalendar({Key key, this.title, this.nombre, this.codigo})
+      : super(key: key);
   final String nombre;
+  final String codigo;
   final String title;
   @override
-  _PantCalendarState createState() => _PantCalendarState(nombreUsuario: nombre);
+  _PantCalendarState createState() =>
+      _PantCalendarState(nombreUsuario: nombre, codeUsuario: codigo);
 }
 
 class _PantCalendarState extends State<PantCalendar> {
   String nombreUsuario = "";
-  _PantCalendarState({this.nombreUsuario});
+  String codeUsuario = "";
+  _PantCalendarState({this.nombreUsuario, this.codeUsuario});
   String id;
   int totalParticipantes;
   int capacidad;
@@ -32,7 +30,7 @@ class _PantCalendarState extends State<PantCalendar> {
     int aforoMax = 100;
     return Scaffold(
       appBar: AppBar(
-        title: Text('PARADISE $nombreUsuario'),
+        title: Text('PARADISE'),
       ),
       ///// mando todo a un Stream builder porque no se como mas ponerlo
       body: new StreamBuilder(
@@ -113,6 +111,7 @@ class _PantCalendarState extends State<PantCalendar> {
                       ///info clases manda una ventana emergente que permite ver la informacion del usuario
                       infoClase(
                           context,
+                          codeUsuario,
                           nombre,
                           descripcion,
                           fechaIni,
@@ -147,6 +146,7 @@ class _PantCalendarState extends State<PantCalendar> {
 
                       infoClase(
                           context,
+                          codeUsuario,
                           nombre,
                           descripcion,
                           fechaIni,
@@ -171,6 +171,7 @@ class _PantCalendarState extends State<PantCalendar> {
   ///esta ventana emergente muestra la informacion mas detallada de cada evento y pregunta si se agrega o no(siempre y cuando aun haya espacio)
   Future infoClase(
       BuildContext context,
+      String idUsua,
       String titulo,
       String des,
       var ini,
@@ -206,8 +207,8 @@ class _PantCalendarState extends State<PantCalendar> {
                 var diaClase = fechaIG.day;
                 bool confirmarDia = mismoDia(diaClase);
                 if (confirmarDia == true) {
-                  agendarse(titulo, des, fechaIG, fechaFG, nombreUsuario, id,
-                      lugar, listado, capacidad);
+                  agendarse(idUsua, titulo, des, fechaIG, fechaFG,
+                      nombreUsuario, id, lugar, listado, capacidad);
                 } else {
                   msjMismoDia(context);
                 }
@@ -234,6 +235,7 @@ class _PantCalendarState extends State<PantCalendar> {
   ///este metodo se encarga de actualizar la base de datos, toca poner todos los datos de nuevo ya que si no se borran y solo deja el que pongas en el
   ///como tal no actualiza si no que remplaza
   Future agendarse(
+      String idUsua,
       String titulo,
       String des,
       DateTime fechaini,

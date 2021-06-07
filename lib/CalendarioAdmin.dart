@@ -146,39 +146,6 @@ class _PantCalendarioState extends State<PantCalendario> {
                   textAlign: TextAlign.center,
                 ),
               )),
-          SizedBox(height: 20),
-          SizedBox(height: 30),
-          Container(
-              margin: EdgeInsets.only(left: 100.0, right: 100.0),
-              decoration:
-                  BoxDecoration(color: Colors.orange[50], border: Border.all()),
-              child: MaterialButton(
-                ///opcion para hacer el boton
-                minWidth: 20.0,
-                height: 50.0,
-                disabledColor: Colors.orange,
-                child: Text('Eliminar evento',
-                    style: TextStyle(fontSize: 20, color: Colors.black)),
-                splashColor: Colors.deepOrange,
-                color: Colors.yellowAccent,
-                elevation: 30.0,
-                onPressed: () {
-                  //if (_eventosController.text.isEmpty) return;
-
-                  if (_events[_controller.selectedDay] != null) {
-                    _events[_controller.selectedDay].remove(_eventosController);
-                  }
-                  /*else {
-                    _events[_controller.selectedDay] = [
-                      _eventosController.text
-                    ];
-                  }*/
-                  prefs.setString("eventos", json.encode(encodeMap(_events)));
-                  _eventController.clear();
-                  msjConfirmar(context);
-                },
-              )),
-          SizedBox(height: 10),
 
           SizedBox(height: 20)
           /////////////////////////
