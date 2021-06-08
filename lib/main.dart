@@ -244,9 +244,9 @@ class _PantIngresoState extends State<PantIngreso> {
                 onPressed: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return new PantLista(); //PantMenPrincipalAdmin(
+                    return new PantRegistro1(); //PantLista(); //PantMenPrincipalAdmin(
                     //  codigo: "",
-                    //); //PantMenPrincipalAdmin(); //PantRegistro1(); // // //PantPerfilAdmin(
+                    //); //PantMenPrincipalAdmin(); // // // //PantPerfilAdmin(
                     // codigo:
                     //   ""); // //PantLista(); ////PantCalendar(); //// PantRegistro1(); ////  ; // // // //
                   }));

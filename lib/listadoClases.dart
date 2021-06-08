@@ -177,8 +177,6 @@ class _PantListClasesState extends State<PantListClases> {
     }
     if (contador == capacidad - 1) {
       claseLlena = "Clase llena";
-    } else {
-      claseLlena = "Clase con cupos";
     }
     print("-> $lista");
     return showDialog(

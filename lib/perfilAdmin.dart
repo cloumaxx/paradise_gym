@@ -63,16 +63,6 @@ class _PantPerfilAdminState extends State<PantPerfilAdmin> {
               }),
           //var userDocument = snapshot.data;
           SizedBox(height: 30),
-          Container(
-            padding: EdgeInsets.all(5),
-            child: TextField(
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Agrega una descripcion tuya\n\n.',
-              ),
-            ),
-          ),
           SizedBox(height: 20),
         ], //children
       ),

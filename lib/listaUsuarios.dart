@@ -28,19 +28,11 @@ class _PantListaState extends State<PantLista> {
     bool auxiliar;
     String listaImp;
     String descImp;
-    int elec;
-    String descripcion;
-    var fechaIni;
-    var fechaFin;
-    var listado;
-    var listadoParticipantes;
-    var entraron;
-    int totalParticipantes;
-    int capacidad;
+
     final f = new DateFormat('yyyy-MM-dd hh:mm');
     String nombre = name;
     return new Scaffold(
-      appBar: new AppBar(title: Text('$name')), //Miembros Registrados')),
+      appBar: new AppBar(title: Text('PARADISE')), //Miembros Registrados')),
       body: new StreamBuilder(
           stream: Firestore.instance.collection('eventos').snapshots(),
           builder: (context, snapshot) {
@@ -68,6 +60,7 @@ class _PantListaState extends State<PantLista> {
                   int i = 0;
                   bool termino = false;
                   listaImp = null;
+                  var fechaIni = DateFormat('yyyy-MM-dd').format(auxI);
                   while (i < limite && termino == false) {
                     //print("${ds['Titulo']} = $i ) ${listaUsuarios[i]} == $nombre  validacion= ${listaUsuarios[i] == nombre}  ");
                     if (listaUsuarios[i] == nombre) {
@@ -75,7 +68,7 @@ class _PantListaState extends State<PantLista> {
                       descImp =
                           "${ds['Descripcion']}\n> Inicia:   $fechaIni\n De: $horaIni:$minIni a $horaFin:$minF\n";
                       print(
-                          ">>>>>>>> ${ds['Titulo']} =$i ) ${listaUsuarios[i]}  # Entro");
+                          ">>>$limite>>>>> ${ds['Titulo']} = $i ) ${listaUsuarios[i]}          # Entro");
                       termino = true;
                     } else {
                       listaImp = null;
@@ -86,24 +79,14 @@ class _PantListaState extends State<PantLista> {
                   }
 
                   ///aqui en adelanto guardo cada dato segun el usuario digite
-                  listado = ds['Participantes'];
-                  listadoParticipantes = ds['Asistieron'];
-
-                  capacidad = ds['Capacidad'];
-                  entraron = ds['Total Ingresaron'];
-
-                  totalParticipantes = ds['Total Ingresaron'];
-                  if (capacidad == 10) {}
-                  elec = index;
-                  nombre = ds['Titulo'];
-                  for (int i = 0; i < 10; i++) {
-                    print(ds['Titulo']);
-                  }
-                  descripcion = ds['Descripcion'];
+                  var listadoPart = ds['Participantes'];
+                  var listadoAsist = ds['Asistieron'];
+                  String titulo = ds['Titulo'];
+                  int capacidad = ds['Capacidad'];
+                  var totalIng = ds['Total Ingresaron'];
+                  var totalPart = ds['Total participantes'];
+                  String descripcion = ds['Descripcion'];
                   var id = ds.documentID;
-
-                  ///los date time y asi son para guardar fechas y actualizarlas
-
                   if (listaImp != null && descImp != null) {
                     DateTime auxI =
                         (snapshot.data.documents[index].data['Fecha Inicio'])
@@ -112,8 +95,7 @@ class _PantListaState extends State<PantLista> {
                     DateTime auxF =
                         (snapshot.data.documents[index].data['Fecha Fin'])
                             .toDate();
-                    fechaIni = DateFormat('yyyy-MM-dd – kk:mm').format(auxI);
-                    fechaFin = DateFormat('yyyy-MM-dd – kk:mm').format(auxF);
+
                     return ListTile(
                       title: Text(
                         '$listaImp ',
@@ -130,40 +112,38 @@ class _PantListaState extends State<PantLista> {
                       onTap: () {
                         print("$fechaEvent");
                         infoClase(
-                          context,
-                          listaImp,
-                          descImp,
-                          fechaEvent,
-                          descripcion,
-                          fechaIni,
-                          fechaFin,
-                          name,
-                          id,
-                          totalParticipantes,
-                          listado,
-                          listadoParticipantes,
-                          capacidad,
-                          entraron,
-                        );
+                            context,
+                            titulo,
+                            descImp,
+                            auxI,
+                            id,
+                            descripcion,
+                            auxI,
+                            auxF,
+                            name,
+                            totalIng,
+                            listadoAsist,
+                            listadoPart,
+                            totalPart,
+                            capacidad);
                       },
                       onLongPress: () {
                         print("$fechaEvent");
                         infoClase(
-                          context,
-                          listaImp,
-                          descImp,
-                          fechaEvent,
-                          descripcion,
-                          fechaIni,
-                          fechaFin,
-                          name,
-                          id,
-                          totalParticipantes,
-                          listado,
-                          listadoParticipantes,
-                          capacidad,
-                          entraron,
-                        );
+                            context,
+                            titulo,
+                            descImp,
+                            auxI,
+                            id,
+                            descripcion,
+                            auxI,
+                            auxF,
+                            name,
+                            totalIng,
+                            listadoAsist,
+                            listadoPart,
+                            totalPart,
+                            capacidad);
                       },
                     );
                   }
@@ -180,16 +160,16 @@ class _PantListaState extends State<PantLista> {
       String titulo,
       String des,
       DateTime fechaAux,
-      String descrip,
-      DateTime fechaini,
-      DateTime fechafin,
-      String nombreUsuario,
-      String id,
-      int lugar,
-      var listado,
-      var listado2,
-      int capacidad,
-      int capacidad2) {
+      String id, //
+      String descripcion, //
+      DateTime fechaini, //
+      DateTime fechafin, //
+      String nombreUsuario, //
+      int totalIngresa,
+      var listaAsistieron, //
+      var listaParticipantes, //
+      int totalParticipantes,
+      int capacidad) {
     bool permitir;
     return showDialog(
       context: context,
@@ -215,17 +195,17 @@ class _PantListaState extends State<PantLista> {
                   permitir = validarIngreso(fechaAux);
                   if (permitir == true) {
                     agendarse(
-                        titulo,
-                        descrip,
-                        fechaini,
-                        fechafin,
-                        nombreUsuario,
                         id,
-                        lugar,
-                        listado,
-                        listado2,
-                        capacidad,
-                        capacidad2);
+                        titulo, //
+                        des, //
+                        fechaini, //
+                        fechafin, //
+                        nombreUsuario, //
+                        totalIngresa,
+                        listaAsistieron, //
+                        listaParticipantes, //
+                        totalParticipantes,
+                        capacidad);
                   }
                 }),
             MaterialButton(
@@ -247,31 +227,39 @@ class _PantListaState extends State<PantLista> {
   }
 
   Future agendarse(
-      String titulo,
-      String des,
-      DateTime fechaini,
-      DateTime fechafin,
-      String nombreUsuario,
       String id,
-      int lugar,
-      var listado,
-      var listado2,
-      int capacidad,
-      int capacidad2) async {
-    int lugarNuevo = lugar + 1;
-    //print("lugarNuevo= $lugarNuevo , capacidad: $capacidad");
+      String titulo, //
+      String des, //
+      DateTime fechaini, //
+      DateTime fechafin, //
+      String nombreUsuario, //
+      int totalIngresa,
+      var listaAsistieron, //
+      var listaParticipantes, //
+      int totalParticipantes,
+      int capacidad) async {
+    int lugarNuevo = totalIngresa + 1;
+    for (int i = 0; i < capacidad; i++) {
+      print("->${listaAsistieron[i]}");
+    }
+    print(
+        "lugarNuevo= $lugarNuevo , capacidad: $capacidad, total Ing = $totalParticipantes, nombre= $nombreUsuario");
+
     if (lugarNuevo <= capacidad) {
-      listado2[lugar] = nombreUsuario;
+      listaAsistieron[totalIngresa] = nombreUsuario;
+      print(">>>> ${listaAsistieron[totalIngresa]} : $nombreUsuario  ");
+
+      String lugarUsar = lugarNuevo.toString();
       await databaseReference.collection('eventos').document(id).setData({
         'Capacidad': capacidad,
         'Titulo': titulo,
         'Descripcion': des,
         'Fecha Inicio': fechaini,
         'Fecha Fin': fechafin,
-        'Total participantes': lugarNuevo,
-        'Participantes': listado,
-        'Asistieron': listado2,
-        'Total Ingresaron': capacidad2,
+        'Total participantes': totalParticipantes,
+        'Participantes': listaParticipantes,
+        'Asistieron': listaAsistieron,
+        'Total Ingresaron': lugarNuevo,
       });
       msjAgregada(context);
     } else {
@@ -282,7 +270,7 @@ class _PantListaState extends State<PantLista> {
   bool validarIngreso(DateTime fechaActivi) {
     bool correcto = false;
     var limite = fechaActivi.add(Duration(minutes: 30));
-    var ahora = DateTime.now();
+    var ahora = fechaActivi.add(Duration(minutes: 10)); //DateTime.now();
     if (ahora.isBefore(limite)) {
       if (ahora.isAfter(fechaActivi)) {
         correcto = true;
