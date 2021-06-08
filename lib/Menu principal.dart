@@ -110,8 +110,9 @@ class _PantMenPrincipalState extends State<PantMenPrincipal> {
                 Navigator.of(context).push(// cabio de pantalla
                     MaterialPageRoute(builder: (BuildContext context) {
                   return new PantLista(
-                      nombreUsar:
-                          nombre); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
+                    nombreUsar: nombre,
+                    codigo: code,
+                  ); //PantLista(); //PantMenPrincipalAdmin(); //PantCalendar(); //// PantRegistro1(); ////  ; // // // //
                 }));
               },
             ),

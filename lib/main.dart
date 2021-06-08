@@ -208,6 +208,7 @@ class _PantIngresoState extends State<PantIngreso> {
                           }));
                           ingreso = true;
                         } else {
+                          print("nombre: $name");
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) {
                             return new PantMenPrincipal(

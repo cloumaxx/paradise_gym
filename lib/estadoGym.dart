@@ -480,13 +480,6 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                     ),
                   ),
                   SizedBox(height: 15),
-                  Text(
-                    ' am ',
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
               ),
             ],
@@ -570,13 +563,6 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    ' pm ',
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
               ),
             ],
@@ -645,6 +631,8 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
   void createRecord(DateTime fechaIni, DateTime fechaFin, String titulo,
       String descripcion, int capacidad) async {
     var listado = new List(capacidad);
+    var asistieron = new List(capacidad);
+
     DocumentReference ref = await databaseReference.collection("eventos").add({
       'Fecha Inicio': fechaIni,
       'Fecha Fin': fechaFin,
@@ -652,12 +640,10 @@ class _PantEstadoGymState extends State<PantEstadoGym> {
       'Descripcion': descripcion,
       'Capacidad': capacidad,
       'Participantes': listado,
+      'Asistieron': asistieron,
       'Total participantes': 0,
+      'Total Ingresaron': 0,
     });
-    /* print("/////////////////////////////////\n" +
-        ref.documentID +
-        "\n/////////////////////////////////////////////////");
-  */
   }
 
   bool validarEvento(

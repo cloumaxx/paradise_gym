@@ -60,6 +60,8 @@ class _PantCalendarState extends State<PantCalendar> {
                   var fechaIni;
                   var fechaFin;
                   var listado;
+                  var listadoParticipantes;
+                  var entraron;
 
                   /// ListTile: una lista de acceso
                   return ListTile(
@@ -83,7 +85,10 @@ class _PantCalendarState extends State<PantCalendar> {
                     onTap: () {
                       ///aqui en adelanto guardo cada dato segun el usuario digite
                       listado = ds['Participantes'];
+                      listadoParticipantes = ds['Asistieron'];
+
                       capacidad = ds['Capacidad'];
+                      entraron = ds['Total Ingresaron'];
 
                       ///id guarda el id de cada documento en la coleccion,ayuda para direccionar
                       id = ds.documentID;
@@ -120,7 +125,9 @@ class _PantCalendarState extends State<PantCalendar> {
                           nombreUsuario,
                           id,
                           listado,
+                          listadoParticipantes,
                           capacidad,
+                          entraron,
                           auxI,
                           auxF);
                       print("-> $elec");
@@ -155,7 +162,9 @@ class _PantCalendarState extends State<PantCalendar> {
                           nombre,
                           id,
                           listado,
+                          listadoParticipantes,
                           capacidad,
+                          entraron,
                           auxI,
                           auxF);
 
@@ -180,7 +189,9 @@ class _PantCalendarState extends State<PantCalendar> {
       String nombreUsuario,
       String id,
       var listado,
+      var listado2,
       int capacidad,
+      int capacidad2,
       DateTime fechaIG,
       DateTime fechaFG) {
     return showDialog(
@@ -207,8 +218,19 @@ class _PantCalendarState extends State<PantCalendar> {
                 var diaClase = fechaIG.day;
                 bool confirmarDia = mismoDia(diaClase);
                 if (confirmarDia == true) {
-                  agendarse(idUsua, titulo, des, fechaIG, fechaFG,
-                      nombreUsuario, id, lugar, listado, capacidad);
+                  agendarse(
+                      idUsua,
+                      titulo,
+                      des,
+                      fechaIG,
+                      fechaFG,
+                      nombreUsuario,
+                      id,
+                      lugar,
+                      listado,
+                      listado2,
+                      capacidad,
+                      capacidad2);
                 } else {
                   msjMismoDia(context);
                 }
@@ -244,7 +266,9 @@ class _PantCalendarState extends State<PantCalendar> {
       String id,
       int lugar,
       var listado,
-      int capacidad) async {
+      var listado2,
+      int capacidad,
+      int capacidad2) async {
     int lugarNuevo = lugar + 1;
     //print("lugarNuevo= $lugarNuevo , capacidad: $capacidad");
     if (lugarNuevo <= capacidad) {
@@ -259,7 +283,10 @@ class _PantCalendarState extends State<PantCalendar> {
         'Fecha Fin': fechafin,
         'Total participantes': lugarNuevo,
         'Participantes': listado,
+        'Asistieron': listado2,
+        'Total Ingresaron': capacidad2,
       });
+      msjAgregada(context);
     } else {
       msjClaseLlena(context);
     }
@@ -304,6 +331,26 @@ class _PantCalendarState extends State<PantCalendar> {
           title: Text('Error'),
           content: const Text(
               'Recuerda que solo puedes programar citas un día antes de estas'),
+          actions: [
+            MaterialButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future msjAgregada(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Exito'),
+          content: const Text('Fuiste agregad@ exitosamente en la clase'),
           actions: [
             MaterialButton(
               child: Text('Ok'),
