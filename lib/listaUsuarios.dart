@@ -270,7 +270,8 @@ class _PantListaState extends State<PantLista> {
   bool validarIngreso(DateTime fechaActivi) {
     bool correcto = false;
     var limite = fechaActivi.add(Duration(minutes: 30));
-    var ahora = fechaActivi.add(Duration(minutes: 10)); //DateTime.now();
+    var ahora = DateTime
+        .now(); //fechaActivi.add(Duration(minutes: 10)); //DateTime.now();
     if (ahora.isBefore(limite)) {
       if (ahora.isAfter(fechaActivi)) {
         correcto = true;
